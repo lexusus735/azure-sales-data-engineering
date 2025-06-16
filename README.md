@@ -11,6 +11,7 @@ This project addresses a critical business scenario by building a scalable data 
 
 ## 🧱 Solution Architecture
 
+![MS Stack drawio (1)](https://github.com/user-attachments/assets/a5fe97d3-e546-4fd9-8481-1c5a6311c3ab)
 
 ---
 
