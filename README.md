@@ -1,48 +1,58 @@
 # Azure-sales-data-engineering
-This project is a comprehensive end-to-end data engineering project using Azure services to ingest, transform, and analyze product sales data. The solution implements a Bronze-Silver-Gold architecture using Azure Data Factory, Data Lake Storage Gen2, and Databricks for scalable ETL processing.
+This is a comprehensive end-to-end data engineering project built on Microsoft Azure. It demonstrates a scalable data pipeline that ingests product sales data from Google Drive, transforms it using Databricks, and stores the output in a Bronze-Silver-Gold architecture using Azure Data Lake Storage Gen2. The final dataset is ready for visualization in Power BI.
 
 ---
 
 ## Project Overview
 
-This project addresses a critical business scenario by building a scalable data pipeline on Azure. The pipeline extracts product sales data from a Google Drive folder, ingests it into Azure Data Lake Storage Gen2 using Azure Data Factory, and performs transformations using Azure Databricks. The final insights are stored in a Gold layer for visualization using Power BI.
+This project solves a real-world business use case: automating ingestion, transformation, and aggregation of product sales data for analytical reporting.
+
+**Key Capabilities**:
+- Ingests raw CSV files from Google Drive via Azure Data Factory (ADF)
+
+- Cleans and transforms data using Azure Databricks (PySpark)
+
+- Stores data in a multi-layered data lake (Bronze → Silver → Gold)
+
+- Prepares data for downstream analytics tools like Power BI
 
 ---
 
-## 🧱 Solution Architecture
+## Solution Architecture
 
 ![MS Stack drawio (1)](https://github.com/user-attachments/assets/a5fe97d3-e546-4fd9-8481-1c5a6311c3ab)
 
 ---
 
-## ⚙️ Technology Stack
+## Technology Stack
 
 | Component              | Purpose                                      |
 |------------------------|----------------------------------------------|
-| **Azure Data Factory** | Ingests data from Google Drive to ADLS Gen2 |
-| **Azure Data Lake Storage Gen2** | Stores raw (bronze), cleaned (silver), and final (gold) data |
-| **Azure Databricks**   | Performs data transformation and aggregation |
-| **Google Drive**       | Source of raw sales data (CSV)              |
+| **Azure Data Factory** | Orchestrates ingestion from Google Drive to ADLS Gen2 |
+| **Azure Data Lake Storage Gen2** | Storage for raw, cleaned, and aggregated datasets |
+| **Azure Databricks**   | Performs scalable data transformation and cleansing |
+| **Google Drive**       | Source of raw CSV sales data              |
+| **Power BI**           | Visualization of insights from Gold layer |
 
 ---
 
-## 🧪 Setup Instructions
+## Setup Instructions
 
-### 🔐 Prerequisites
+### Prerequisites
 
 - An active **Azure subscription**
-- Access to **Google Drive** containing sales data (CSV files)
-- Installed: Power BI Desktop (optional)
+- Access to **Google Drive** containing sales CSV files
+- Installed: Power BI Desktop for reporting
 
 ---
 
-### 🧰 Step 1: Azure Environment Setup
+### Step 1: Azure Environment Setup
 
 #### 1.1 Create a Resource Group
 
 - Sign in to the [Azure Portal](https://portal.azure.com/).
 - Navigate to **Resource Groups** and click **+ Create**.
-- Provide a name like `sales-data-rg` and choose a region (e.g., East US).
+- Provide a name like `sales-data-rg` and choose a region.
 - Click **Review + Create**, then **Create**.
 
 #### 1.2 Provision Required Azure Services
@@ -53,9 +63,9 @@ Use the Azure Portal to manually create the following resources:
   - Go to **Storage accounts** → **+ Create**.  
   - Enable **Data Lake Storage Gen2** by turning on *Hierarchical namespace*.  
   - After creating the account, create the following containers under *Containers*:
-    - `bronze` (raw data)
-    - `silver` (cleaned data)
-    - `gold` (aggregated/final data)
+    - `bronze` to store raw data
+    - `silver` to store cleaned data
+    - `gold` to store aggregated/final data
 
 - **Azure Data Factory**
   - Go to **Data factories** → **+ Create**.
@@ -65,21 +75,22 @@ Use the Azure Portal to manually create the following resources:
 - **Azure Databricks**
   - Go to **Azure Databricks** → **+ Create**.
   - Choose the same resource group and region.
-  - After deployment, launch the workspace and create a cluster.
+  - After deployment, launch the workspace
+  - Create a cluster for transformation.
 
 ---
 
-### 📥 Step 2: Data Ingestion
+### Step 2: Data Ingestion
 
 - **Create a pipeline in Azure Data Factory**:
-  - Source: HTTP or REST connector pointing to Google Drive link
-  - Sink: ADLS Gen2 bronze container
+  - Source: HTTP connector to Google Drive link
+  - Sink: Bronze container in ADLS Gen2
 
-- Schedule the pipeline using a **Trigger** to run every 24 hours
+- Schedule pipeline with **24 hours trigger**
 
 ---
 
-### 🧹 Step 3: Data Transformation (Azure Databricks)
+### Step 3: Data Transformation (Azure Databricks)
 
 #### 3.1 Mount ADLS in Databricks
 ```python
@@ -140,6 +151,39 @@ def write_to_silver(df,table_name):
         print(f"{table_name} written to silver")
     except Exception as e:
         print(f"error in writing {table_name} to silver",e)
+```
+----
+### Step 4: Power BI Dashboard
+The final dataset stored in the Gold layer of the data lake is used to create an interactive Power BI report. This dashboard helps stakeholders monitor sales performance and uncover insights across product categories and time periods.
 
+#### 4.1 Connect Power BI to Gold Layer
+- Open Power BI Desktop
+- Click Get Data → Choose:
+- Azure Data Lake Storage Gen2 
+- Authenticate with your Azure credentials
+- Load CSVs from the gold container
+
+#### 4.1 Key Metrics & Visualizations
+| Visualization                 | Description                                          |
+| ----------------------------- | ---------------------------------------------------- |
+| **Total Sales (KPI Card)**    | Shows overall revenue from all orders                |
+| **Total Orders (KPI Card)**   | Count of all customer orders processed               |
+| **Monthly Sales Trend**       | Line chart showing total sales by month      |
+| **Sales by Product Line**     | Pie chart of sales revenue per product line   |
+| **Sales by Product Category** | Pie chart breaking down revenue by category |
+
+![product_report_dashboard](https://github.com/user-attachments/assets/e7105204-b68c-4f84-a1ef-e864676d339f)
+
+---
+### Final Output
+- Transformed and cleansed data is available in the Silver container
+- Aggregated data is written to the Gold container
+- Data from the Gold layer can be connected to Power BI for dashboard creation
+---
+### Future Enhancements
+- Add Delta Lake for ACID transactions and schema enforcement
+- Integrate CI/CD using Azure DevOps pipelines
+- Implement data quality validation using tools like Great Expectations
+- Add alerting and monitoring with Azure Monitor or Log Analytics
 
 
