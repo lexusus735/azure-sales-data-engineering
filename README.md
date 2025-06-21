@@ -20,7 +20,8 @@ This project solves a real-world business use case: automating ingestion, transf
 
 ## Solution Architecture
 
-![MS Stack drawio (1)](https://github.com/user-attachments/assets/a5fe97d3-e546-4fd9-8481-1c5a6311c3ab)
+![MS Stack drawio (1)](https://github.com/user-attachments/assets/1480f6ca-f656-4599-a084-0f7f093ed544)
+
 
 ---
 
@@ -172,7 +173,8 @@ The final dataset stored in the Gold layer of the data lake is used to create an
 | **Sales by Product Line**     | Pie chart of sales revenue per product line   |
 | **Sales by Product Category** | Pie chart breaking down revenue by category |
 
-![product_report_dashboard](https://github.com/user-attachments/assets/e7105204-b68c-4f84-a1ef-e864676d339f)
+![product_report_dashboard](https://github.com/user-attachments/assets/508317a2-ecb2-44b3-b449-2814242387a0)
+
 
 ---
 ### Final Output
